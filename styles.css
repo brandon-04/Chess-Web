@@ -1,0 +1,40 @@
+:root {
+    --norm-height: 750px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#outerGrid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: var(--norm-height);
+    width: var(--norm-height);
+
+    border: thick solid black;
+}
+
+.row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    height: 12.5%;
+    width: 100%;
+}
+
+.cell {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    height: 100%;
+    width: 12.5%;
+
+    border: thin solid black;
+}
