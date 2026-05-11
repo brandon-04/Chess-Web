@@ -1,24 +1,20 @@
 let outerGrid = document.querySelector("#outerGrid");
 
-let letters = ["","a","b","c","d","e","f","g","h"];
+let letters = ["a","b","c","d","e","f","g","h"];
 let boardCells = [];
 let selectedPiece = "";
 
-let startPos = {
-    "a1": "white-rook", "a2": "white-pawn", "a7": "black-pawn", "a8": "black-rook",
-    "b1": "white-knight", "b2": "white-pawn", "b7": "black-pawn", "b8": "black-knight",
-    "c1": "white-bishop", "c2": "white-pawn", "c7": "black-pawn", "c8": "black-bishop",
-    "d1": "white-queen", "d2": "white-pawn", "d7": "black-pawn", "d8": "black-queen",
-    "e1": "white-king", "e2": "white-pawn", "e7": "black-pawn", "e8": "black-king",
-    "f1": "white-bishop", "f2": "white-pawn", "f7": "black-pawn", "f8": "black-bishop",
-    "g1": "white-knight", "g2": "white-pawn", "g7": "black-pawn", "g8": "black-knight",
-    "h1": "white-rook", "h2": "white-pawn", "h7": "black-pawn", "h8": "black-rook"
-};
 
-let emptyCells = [];
+let pieceAssetDirectory = {
+    "p" : "/img/pieces/black-pawn.png", "P" : "/img/pieces/white-rook.png",
+    "r" : "/img/pieces/black-rook.png", "R" : "/img/pieces/white-rook.png",
+    "b" : "/img/pieces/black-bishop.png", "B" : "/img/pieces/white-rook.png",
+    "q" : "/img/pieces/black-queen.png", "Q" : "/img/pieces/white-rook.png",
+    "k" : "/img/pieces/black-king.png", "K" : "/img/pieces/white-rook.png",
+    "n" : "/img/pieces/black-knight.png", "N" : "/img/pieces/white-rook.png",
+}
 
 startingBoardSetUp();
-
 
 function startingBoardSetUp() {
     gridGeneration();
@@ -36,13 +32,6 @@ function gridGeneration() {
             let cell = document.createElement("div");
             
             cell.setAttribute("id", cellCoord)
-
-            if(startPos[cellCoord] == undefined) {
-                emptyCells.push(cellCoord)
-            }     
-            else {
-                cell.style.backgroundImage = `url('/img/pieces/${startPos[cellCoord]}.png')`;
-            }  
             
             if(i % 2 == 0 && x % 2 == 0) {
                 cell.setAttribute("class", "cellColoured");
@@ -53,10 +42,6 @@ function gridGeneration() {
             else {
                 cell.setAttribute("class", "cell");
             }
-
-            cell.addEventListener("click", () => {
-                updateSelectedPiece(cellCoord);
-            });
         
             row.appendChild(cell);
         }
@@ -74,6 +59,38 @@ function updateSelectedPiece(cellCoord) {
         cell.style.backgroundColor = "lightpink"
         selectedPiece = cellCoord;
     }
-
-
 }
+
+
+let startingPos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+decodeFen(startingPos);
+
+function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
+    const fenArr = fen.split(" ");
+
+    let piecePlacementArr = fenArr[0].split("");
+    let activeColour = fenArr[1];
+    let castlingRights = fenArr[2];
+    let enPassantTarget = fenArr[3];
+    let HalfmoveClock = fenArr[4];
+    let fullmoveNum = fenArr[5];
+
+    let rowNum = 8;
+    let letterInd = 0;
+
+    piecePlacementArr.forEach(element => {
+        if (element == "/") {
+            rowNum--;
+        }
+        else if(isNaN(element) == false) {
+            //isnum
+        }
+        else {
+
+        }
+
+    });
+}
+
+//llanfairpwllgwyngyllgorgerechdrynrobwllllantisilliogogogoch
