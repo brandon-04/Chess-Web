@@ -2,6 +2,7 @@ let outerGrid = document.querySelector("#outerGrid");
 
 let letters = ["","a","b","c","d","e","f","g","h"];
 let boardCells = [];
+let selectedPiece = "";
 
 let startPos = {
     "a1": "white-rook", "a2": "white-pawn", "a7": "black-pawn", "a8": "black-rook",
@@ -12,7 +13,9 @@ let startPos = {
     "f1": "white-bishop", "f2": "white-pawn", "f7": "black-pawn", "f8": "black-bishop",
     "g1": "white-knight", "g2": "white-pawn", "g7": "black-pawn", "g8": "black-knight",
     "h1": "white-rook", "h2": "white-pawn", "h7": "black-pawn", "h8": "black-rook"
-}
+};
+
+let emptyCells = [];
 
 startingBoardSetUp();
 
@@ -33,7 +36,6 @@ startingBoardSetUp();
 
 function startingBoardSetUp() {
     gridGeneration();
-    placePieces();
 }
 
 function gridGeneration() {
@@ -47,11 +49,14 @@ function gridGeneration() {
     
             let cell = document.createElement("div");
             
-            cell.setAttribute("id", cellCoord);
+            cell.setAttribute("id", cellCoord)
 
-            cell.style.backgroundImage = `url('/img/pieces/${startPos[cellCoord]}.png')`
-            
-            boardCells.push(cell);
+            if(startPos[cellCoord] == undefined) {
+                emptyCells.push(cellCoord)
+            }     
+            else {
+                cell.style.backgroundImage = `url('/img/pieces/${startPos[cellCoord]}.png')`;
+            }  
             
             if(i % 2 == 0 && x % 2 == 0) {
                 cell.setAttribute("class", "cellColoured");
@@ -66,4 +71,8 @@ function gridGeneration() {
             row.appendChild(cell);
         }
     }
+}
+
+function updateSelectedPiece() {
+
 }
