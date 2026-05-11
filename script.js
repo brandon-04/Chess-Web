@@ -3,8 +3,6 @@ let outerGrid = document.querySelector("#outerGrid");
 let letters = ["a","b","c","d","e","f","g","h"];
 let boardCells = [];
 let selectedPiece = "";
-
-
 let pieceAssetDirectory = {
     "p" : "/img/pieces/black-pawn.png", "P" : "/img/pieces/white-rook.png",
     "r" : "/img/pieces/black-rook.png", "R" : "/img/pieces/white-rook.png",
@@ -26,7 +24,7 @@ function gridGeneration() {
         row.setAttribute("class", "row");
         outerGrid.appendChild(row);
     
-        for(let x = 1; x < 9; x++) {
+        for(let x = 0; x < 8; x++) {
             let cellCoord = `${letters[x]}${i}`;
     
             let cell = document.createElement("div");
@@ -62,35 +60,36 @@ function updateSelectedPiece(cellCoord) {
 }
 
 
-let startingPos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+let startingPos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"// w KQkq - 0 1;
 
 decodeFen(startingPos);
 
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
 
-    let piecePlacementArr = fenArr[0].split("");
     let activeColour = fenArr[1];
     let castlingRights = fenArr[2];
     let enPassantTarget = fenArr[3];
     let HalfmoveClock = fenArr[4];
     let fullmoveNum = fenArr[5];
 
-    let rowNum = 8;
-    let letterInd = 0;
-
-    piecePlacementArr.forEach(element => {
-        if (element == "/") {
-            rowNum--;
-        }
-        else if(isNaN(element) == false) {
-            //isnum
-        }
-        else {
-
-        }
-
-    });
+    let rows = fenArr[0].split("/");
+    
+    for(let i = 0; i < 8; i++) {
+        placeFenPiece(rows[i]);
+    }
+    
 }
 
-//llanfairpwllgwyngyllgorgerechdrynrobwllllantisilliogogogoch
+function placeFenPiece(arrayOfPieces, row) {
+    for(let i = 8; i > 0; i--) {
+        let arrPiece = arrayOfPieces[i];
+        let letter = letters[i];
+
+        let curCellCoord = `${letter}${row}`;
+
+        let curCell = document.querySelector(`#${curCellCoord}`)
+        curCell.backgroundImage = `url(${pieceAssetDirectory[arrPiece]})`
+
+    }
+}
