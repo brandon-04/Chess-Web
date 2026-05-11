@@ -20,20 +20,6 @@ let emptyCells = [];
 startingBoardSetUp();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function startingBoardSetUp() {
     gridGeneration();
 }
@@ -67,12 +53,27 @@ function gridGeneration() {
             else {
                 cell.setAttribute("class", "cell");
             }
+
+            cell.addEventListener("click", () => {
+                updateSelectedPiece(cellCoord);
+            });
         
             row.appendChild(cell);
         }
     }
 }
 
-function updateSelectedPiece() {
+function updateSelectedPiece(cellCoord) {
+    let cell = document.querySelector(`#${cellCoord}`);
+
+    if(cellCoord == selectedPiece) {
+        cell.style.backgroundColor = "";
+        selectedPiece = ""
+    }
+    else if (selectedPiece == "") {
+        cell.style.backgroundColor = "lightpink"
+        selectedPiece = cellCoord;
+    }
+
 
 }
