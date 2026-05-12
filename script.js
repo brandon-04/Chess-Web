@@ -2,7 +2,10 @@ let outerGrid = document.querySelector("#outerGrid");
 
 let letters = ["a","b","c","d","e","f","g","h"];
 let selectedPiece = "";
-let gameState = [];
+
+let activeColour = "w"
+let halfmoveClockCount = 0;
+let fullmoveClockCount = 1;
 
 startingBoardSetUp();
 
@@ -44,23 +47,23 @@ function updateSelectedPiece(cellCoord) {
     }
 }
 
+let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-let startingPos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"// w KQkq - 0 1;
-
-decodeFen(startingPos);
+decodeFen(startingFen);
 
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
     
     let piecePlacement = transformPieceArrayFen(fenArr[0]);
-    let activeColour = fenArr[1];
+    let actCol = fenArr[1];
     let castlingRights = fenArr[2];
     let enPassantTarget = fenArr[3];
     let HalfmoveClock = fenArr[4];
     let fullmoveNum = fenArr[5];
 
-
-
+    updateActiveColour(actCol);
+    updateHalfMoveClock(HalfmoveClock);
+    updateFullMoves(fullmoveNum);
 }
 
 function transformPieceArrayFen(piecePlacementArray) {
@@ -68,21 +71,38 @@ function transformPieceArrayFen(piecePlacementArray) {
     let piecePlacementNewArray = [];
     
     indRows.forEach(element => {
-        let row = element.split("");
+        let row = element.split("");transformPieceArrayFen
         let newRow = [];
         
         row.forEach(char => {
             let num = parseInt(char);
             if(isNaN(num) == false) {
-                for(let i = 0; i < num; i++) {
-                    newRow.push("1");
-                }
+                for(let i = 0; i < num; i++) { newRow.push("1") }
             }
             else {
-                newRow.push(char)
+                newRow.push(char);
             }
-        })
-        piecePlacementNewArray.push(newRow)
+        });
+        piecePlacementNewArray.push(newRow);
     });
     return piecePlacementNewArray;
+}
+
+function updateActiveColour(newColour) {
+    let activeColourText = document.getElementById("activeColourCounter")
+    activeColour = newColour;
+    activeColourText.innerHTML = `Active Colour: ${activeColour == "w" ? "White" : "Black"}`;
+}
+
+function updateHalfMoveClock(newVal) {
+    let clock = document.getElementById("halfmoveClock");
+    clock.innerHTML = `Halfmove Clock: ${newVal}`
+
+    halfmoveClockCount = parseInt(newVal);
+}
+
+function updateFullMoves(newVal) {
+    let clock = document.getElementById("fullmoveCounter");
+    clock.innerHTML = `Fullmove Clock: ${newVal}`;
+    fullmoveClockCount = parseInt(newVal);
 }
