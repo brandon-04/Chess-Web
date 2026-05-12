@@ -51,52 +51,38 @@ decodeFen(startingPos);
 
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
-
     
+    let piecePlacement = transformPieceArrayFen(fenArr[0]);
     let activeColour = fenArr[1];
     let castlingRights = fenArr[2];
     let enPassantTarget = fenArr[3];
     let HalfmoveClock = fenArr[4];
     let fullmoveNum = fenArr[5];
+
+
+
+}
+
+function transformPieceArrayFen(piecePlacementArray) {
+    let indRows = piecePlacementArray.split("/");
+    let piecePlacementNewArray = [];
     
-    let piecePlacement = fenArr[0];
-    let rowArray = piecePlacement.split("/");
-
-    for(let i = 8; i > 0; i--) {
-        let curRow = rowArray[i-1].split("");
-
-        for(let x = 0; x < 8; x++) {
-            let cellCoord = `${letters[x]}${i}`;
-            let curChar = curRow[x];
-            // console.log(cellCoord)
-            // console.log(curChar)
-
-            if(isNaN(curChar) == false) {
-                for(let i = 0; i < parseInt(curChar); i++ ) {
-
+    indRows.forEach(element => {
+        let row = element.split("");
+        let newRow = [];
+        
+        row.forEach(char => {
+            let num = parseInt(char);
+            if(isNaN(num) == false) {
+                for(let i = 0; i < num; i++) {
+                    newRow.push("1");
                 }
             }
-
-            
-
-
-        }
-    }
-}
-
-function sortRows(PiecePlacementArr) {
-    
-}
-
-function addFenPiece(piece) {
-    let pieceAssetDirectory = {
-        "p" : "/img/pieces/black-pawn.png", "P" : "/img/pieces/white-rook.png",
-        "r" : "/img/pieces/black-rook.png", "R" : "/img/pieces/white-rook.png",
-        "b" : "/img/pieces/black-bishop.png", "B" : "/img/pieces/white-rook.png",
-        "q" : "/img/pieces/black-queen.png", "Q" : "/img/pieces/white-rook.png",
-        "k" : "/img/pieces/black-king.png", "K" : "/img/pieces/white-rook.png",
-        "n" : "/img/pieces/black-knight.png", "N" : "/img/pieces/white-rook.png",
-    }
-
-
+            else {
+                newRow.push(char)
+            }
+        })
+        piecePlacementNewArray.push(newRow)
+    });
+    return piecePlacementNewArray;
 }
