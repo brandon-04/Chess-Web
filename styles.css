@@ -1,12 +1,26 @@
+@font-face {
+    font-family: Saira;
+    src: url('/fonts/saira/Saira-VariableFont_wdth\,wght.ttf');
+}
+
 :root {
     --norm-height: 750px;
+    --moves-width: 400px;
+
+    --default-font: Saira;
 }
 
 body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
+
+    background: darkslategray;
+    font-family: var(--default-font);
 }
+
+/*grid and board stylings*/
 
 #outerGrid {
     display: flex;
@@ -18,6 +32,7 @@ body {
     width: var(--norm-height);
 
     border: thick solid black;
+    border-radius: 5px;
 }
 
 .row {
@@ -57,15 +72,49 @@ body {
     background-color: #80471C;
 }
 
-.piece {
-    height: 100%;
-    width: 100%;
+/*Moves container stylings*/
 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
+#moveContainer {
+    display: flex;
+    justify-content: top;
+    align-items: center;
+    flex-direction: column;
+
+    width: var(--moves-width);
+    height: var(--norm-height);
+
+    border: thick solid black;
 }
 
+#titleBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 
+    height: 10%;
+    width: 100%;
+
+    border: thin solid black;
+}
+#titleBox > h1 {
+    font-size: 4em;
+}
+
+#moveCounterBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+
+    height: 10%;
+    width: 10%;
+
+    border: thin solid black;
+}
+#moveCounterBox > h1 {
+    font-size: 1em;
+}
 
 
