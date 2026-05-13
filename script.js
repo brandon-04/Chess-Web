@@ -88,6 +88,10 @@ function transformPieceArrayFen(piecePlacementArray) {
     return piecePlacementNewArray;
 }
 
+function updateBoardState() {
+
+}
+
 function updateActiveColour(newColour) {
     let activeColourText = document.getElementById("activeColourCounter")
     activeColour = newColour;

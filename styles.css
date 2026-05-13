@@ -84,6 +84,7 @@ body {
     height: var(--norm-height);
 
     border: thick solid black;
+    border-radius: 5px;
 }
 
 #titleBox {
@@ -101,6 +102,23 @@ body {
     font-size: 4em;
 }
 
+#optionsBox {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    height: var(--moves-width);
+    width: 10%;
+
+    border: thick solid black;
+    border-radius: 5px;
+
+ 
+}
+
 #moveCounterBox {
     display: flex;
     justify-content: center;
@@ -108,13 +126,43 @@ body {
     text-align: center;
     flex-direction: column;
 
-    height: 10%;
-    width: 10%;
+    height: 50%;
+    width: 100%;
 
-    border: thin solid black;
 }
+
 #moveCounterBox > h1 {
     font-size: 1em;
+}
+
+#buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 50%; 
+    width: 100%;
+
+    gap: 10px;
+
+}
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    
+    width: 90%;
+    height: 25%;
+
+    border: thin solid black;
+    border-radius: 15px;
+
+    background-color: black;
+}
+.buttons > p {
+    font-size: 1em;
+    color: aliceblue;
 }
 
 
