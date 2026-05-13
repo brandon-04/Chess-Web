@@ -10,6 +10,10 @@
     --default-font: Saira;
 }
 
+*{
+    color: aliceblue;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -62,6 +66,7 @@ body {
 
 .cell:hover, .cellColoured:hover {
     background-color: lightpink;
+    filter: drop-shadow(0 0 0.75rem lightpink);
 }
 
 .cell {
@@ -135,7 +140,7 @@ body {
     font-size: 1em;
 }
 
-#buttons {
+#buttonsBox {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -145,8 +150,8 @@ body {
     width: 100%;
 
     gap: 10px;
-
 }
+
 .buttons {
     display: flex;
     justify-content: center;
@@ -160,9 +165,13 @@ body {
 
     background-color: black;
 }
+
+.buttons:hover {
+    filter: drop-shadow(0 0 0.75rem crimson);
+    background-color: crimson;
+}
 .buttons > p {
     font-size: 1em;
-    color: aliceblue;
 }
 
 

@@ -3,9 +3,21 @@ let outerGrid = document.querySelector("#outerGrid");
 let letters = ["a","b","c","d","e","f","g","h"];
 let selectedPiece = "";
 
-let activeColour = "w"
-let halfmoveClockCount = 0;
-let fullmoveClockCount = 1;
+let activeColour = "-"
+let halfmoveClockCount = "-";
+let fullmoveClockCount = "-";
+
+let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+document.getElementById("startNewButton").addEventListener("click", () => {
+    decodeFen(startingFen);
+});
+document.getElementById("saveButton").addEventListener("click", () => {
+    console.log("saved")
+});
+document.getElementById("loadButton").addEventListener("click", () => {
+    console.log("saved")
+});
 
 startingBoardSetUp();
 
@@ -47,10 +59,6 @@ function updateSelectedPiece(cellCoord) {
     }
 }
 
-let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-decodeFen(startingFen);
-
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
     
@@ -86,10 +94,6 @@ function transformPieceArrayFen(piecePlacementArray) {
         piecePlacementNewArray.push(newRow);
     });
     return piecePlacementNewArray;
-}
-
-function updateBoardState() {
-
 }
 
 function updateActiveColour(newColour) {
