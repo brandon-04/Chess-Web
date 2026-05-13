@@ -3,9 +3,12 @@ let outerGrid = document.querySelector("#outerGrid");
 let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 let letters = ["a","b","c","d","e","f","g","h"];
 
+let blackPieces = ["r","n","b","q","k","p"];
+let whitePieces = ["R","N","B","Q","K","P"];
+
 let activeColour = "-"
-let halfmoveClockCount = "-";
-let fullmoveClockCount = "-";
+let halfmoveClockCount = 0;
+let fullmoveClockCount = 1;
 
 let selectedCoord = "";
 let isPieceSelected = false;
@@ -103,7 +106,7 @@ function updateHalfMoveClock(newVal) {
 
 function updateFullMoves(newVal) {
     let clock = document.getElementById("fullmoveCounter");
-    clock.innerHTML = `full moves: ${parseInt(newVal)}`;
+    clock.innerHTML = `full moves: ${Math.round(newVal)}`;
     fullmoveClockCount = parseInt(newVal);
 }
 
@@ -122,11 +125,12 @@ function updateFenGameState(piecePlacementArray) {
 
             if(curChar == "1") {
                 gameState[cellCoord] = "1";
+                cell.style.backgroundImage = "";
                 continue;
             }
             else {
                 gameState[cellCoord] = curChar;
-                cell.style.backgroundImage = `url('/img/pieces/${curChar}.png')`
+                cell.style.backgroundImage = `url('/img/pieces/${curChar}.png')`;
             }
         }
     }
@@ -161,12 +165,17 @@ function movePieces(startingCoord, targetCoord) {
     let startCell = document.getElementById(startingCoord);
     let targetCell = document.getElementById(targetCoord);
 
-    gameState[startingCoord] = "";
+    gameState[startingCoord] = "1";
     gameState[targetCoord] = piece
 
     startCell.style.backgroundImage = "";
     targetCell.style.backgroundImage = `url('/img/pieces/${piece}.png')`;
-    fullmoveClockCount++;
+
+    if(activeColour == "b") {
+       updateFullMoves(fullmoveClockCount + 1) 
+    }
+
+    updateActiveColour(activeColour == "w" ? "b" : "w")
 }
 
 
