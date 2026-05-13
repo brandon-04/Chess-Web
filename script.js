@@ -138,7 +138,18 @@ function updateFenGameState(piecePlacementArray) {
 function updateSelectedCoord(cellCoord) {
     let pieceInCoord = gameState[cellCoord];
 
-    console.log(pieceInCoord)
+    movePiece(cellCoord, "a4", pieceInCoord)
+}
+
+function movePiece(cellCoord, targetCoord, piece) {
+    let ogCellLetter = cellCoord[0];
+    let ogCellNum = parseInt(cellCoord[1]);
+
+    let cell = document.getElementById(cellCoord);
+    let targetCell = document.getElementById(`${ogCellLetter}${ogCellNum + 2}`);
+
+    cell.style.backgroundImage = "";
+    targetCell.style.backgroundImage = `url('/img/pieces/${piece}.png')`;
 }
 
 //end of piece moving functions
