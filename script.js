@@ -2,65 +2,54 @@ let outerGrid = document.querySelector("#outerGrid");
 
 let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 let letters = ["a","b","c","d","e","f","g","h"];
-let pieces = ["p","P","r","R","n","N","b","B","k","K","q","Q"];
-let selectedPiece = "";
 
 let activeColour = "-"
 let halfmoveClockCount = "-";
 let fullmoveClockCount = "-";
 
-let gameState = {};
+let selectedPieceStart = "";
+let selectedPieceEnd = "";
+let isPieceSelected = false;
 
-document.getElementById("startNewButton").addEventListener("click", () => {
-    decodeFen(startingFen);
-});
-document.getElementById("saveButton").addEventListener("click", () => {
-});
-document.getElementById("loadButton").addEventListener("click", () => {
-    console.log("loaded")
-});
+let gameState = {};//populated by gridGeneration();
 
-startingBoardSetUp();
+boardSetup();
 
-function startingBoardSetUp() {
-    gridGeneration();
-}
-
-function gridGeneration() {
+function boardSetup() {
     for(let i = 8; i > 0; i--) {
         let row = document.createElement("div");
         row.setAttribute("class", "row");
 
         outerGrid.appendChild(row);
-    
+        
         for(let x = 0; x < 8; x++) {
             let cellCoord = `${letters[x]}${i}`;
             let cell = document.createElement("div");
-
+            
             gameState[`${letters[x]}${i}`] = "1";
             
             cell.setAttribute("id", cellCoord)
             cell.setAttribute("class", (i % 2 != 0 && x % 2 == 0)||(i % 2 == 0 && x % 2 != 0) ? "cellColoured" : "cell");
 
-            cell.addEventListener("click", () => { updateSelectedPiece(cellCoord) });
-        
+            cell.addEventListener("click", () => {
+                updateSelectedCoord(cellCoord);
+            })
+            
             row.appendChild(cell);
         }
     }
+    
+    document.getElementById("startNewButton").addEventListener("click", () => {
+        decodeFen(startingFen);
+    });
+    document.getElementById("saveButton").addEventListener("click", () => {
+    
+    });
+    document.getElementById("loadButton").addEventListener("click", () => {
+        console.log("loaded")
+    });
 }
 
-function updateSelectedPiece(cellCoord) {
-    let cell = document.querySelector(`#${cellCoord}`);
-
-    if(cellCoord == selectedPiece) {
-        cell.style.backgroundColor = "";
-        selectedPiece = ""
-    }
-    else if (selectedPiece == "") {
-        cell.style.backgroundColor = "lightpink"
-        selectedPiece = cellCoord;
-    }
-}
 //start of fen decoder functions
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
@@ -72,7 +61,7 @@ function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassa
     let HalfmoveClock = fenArr[4];
     let fullmoveNum = fenArr[5];
 
-    updateGameState(piecePlacement);
+    updateFenGameState(piecePlacement);
     updateActiveColour(actCol);
     updateHalfMoveClock(HalfmoveClock);
     updateFullMoves(fullmoveNum);
@@ -103,23 +92,23 @@ function transformPieceArrayFen(piecePlacementArray) {
 function updateActiveColour(newColour) {
     let activeColourText = document.getElementById("activeColourCounter")
     activeColour = newColour;
-    activeColourText.innerHTML = `Active Colour: ${activeColour == "w" ? "White" : "Black"}`;
+    activeColourText.innerHTML = `active colour: ${activeColour == "w" ? "white" : "black"}`;
 }
 
 function updateHalfMoveClock(newVal) {
     let clock = document.getElementById("halfmoveClock");
-    clock.innerHTML = `Halfmove Clock: ${newVal}`
+    clock.innerHTML = `half move clock: ${newVal}`
 
     halfmoveClockCount = parseInt(newVal);
 }
 
 function updateFullMoves(newVal) {
     let clock = document.getElementById("fullmoveCounter");
-    clock.innerHTML = `Fullmove Clock: ${newVal}`;
+    clock.innerHTML = `full moves: ${newVal}`;
     fullmoveClockCount = parseInt(newVal);
 }
 
-function updateGameState(piecePlacementArray) {
+function updateFenGameState(piecePlacementArray) {
     let newArr = piecePlacementArray.reverse();
 
     for(let i = 8; i > 0; i--) {
@@ -133,27 +122,25 @@ function updateGameState(piecePlacementArray) {
             let curChar = curRow[x]
 
             if(curChar == "1") {
-                gameState[`${letter}${rowInd}`] = "1";
+                gameState[cellCoord] = "1";
                 continue;
             }
             else {
-                gameState[`${letter}${rowInd}`] = curChar;
+                gameState[cellCoord] = curChar;
                 cell.style.backgroundImage = `url('/img/pieces/${curChar}.png')`
             }
         }
     }
-    console.log(gameState)
 }
 //end of fen decoder functions
 
 //start of piece moving functions
+function updateSelectedCoord(cellCoord) {
+    let pieceInCoord = gameState[cellCoord];
+
+    console.log(pieceInCoord)
+}
 
 //end of piece moving functions
 
 
-//piece movements
-//values = x()0()
-
-//pawn : if not moved yet -> x()0(+1 or +2) // only forwards by one or two squares.
-//rook : x(+ or - infinitely until blocked)0() or x()0(+ or - infinitely until blocked) -> only straight lines
-//knight : 
