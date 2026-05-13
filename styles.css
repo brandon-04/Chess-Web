@@ -22,6 +22,8 @@ body {
 
     background: darkslategray;
     font-family: var(--default-font);
+
+    gap: 15px;
 }
 
 /*grid and board stylings*/

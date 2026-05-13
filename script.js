@@ -3,6 +3,10 @@ let outerGrid = document.querySelector("#outerGrid");
 let letters = ["a","b","c","d","e","f","g","h"];
 let selectedPiece = "";
 
+let curBoard = [
+
+];
+
 let activeColour = "-"
 let halfmoveClockCount = "-";
 let fullmoveClockCount = "-";
@@ -13,10 +17,9 @@ document.getElementById("startNewButton").addEventListener("click", () => {
     decodeFen(startingFen);
 });
 document.getElementById("saveButton").addEventListener("click", () => {
-    console.log("saved")
 });
 document.getElementById("loadButton").addEventListener("click", () => {
-    console.log("saved")
+    console.log("loaded")
 });
 
 startingBoardSetUp();
@@ -59,6 +62,7 @@ function updateSelectedPiece(cellCoord) {
     }
 }
 
+//start of fen decoder functions
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
     
@@ -69,6 +73,7 @@ function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassa
     let HalfmoveClock = fenArr[4];
     let fullmoveNum = fenArr[5];
 
+    updateGameState(piecePlacement);
     updateActiveColour(actCol);
     updateHalfMoveClock(HalfmoveClock);
     updateFullMoves(fullmoveNum);
@@ -114,3 +119,27 @@ function updateFullMoves(newVal) {
     clock.innerHTML = `Fullmove Clock: ${newVal}`;
     fullmoveClockCount = parseInt(newVal);
 }
+
+function updateGameState(piecePlacementArray) {
+    let newArr = piecePlacementArray.reverse();
+
+    for(let i = 8; i > 0; i--) {
+        let curRow = newArr[i-1];
+        let rowInd = i;
+        
+        for(let x = 0; x < 8; x++) {
+            let letter = letters[x]
+            let cellCoord = `${letter}${rowInd}`
+            let cell = document.querySelector(`#${cellCoord}`)
+            let curChar = curRow[x]
+
+            if(curChar == "1") {
+                continue;
+            }
+            else {
+                cell.style.backgroundImage = `url('/img/pieces/${curChar}.png')`
+            }
+        }
+    }
+}
+//end of fen decoder functions
