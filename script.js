@@ -7,15 +7,14 @@ let activeColour = "-"
 let halfmoveClockCount = "-";
 let fullmoveClockCount = "-";
 
-let selectedPieceStart = "";
-let selectedPieceEnd = "";
+let selectedCoord = "";
 let isPieceSelected = false;
 
 let gameState = {};//populated by gridGeneration();
 
 boardSetup();
 
-function boardSetup() {
+function boardSetup() {//generates coloured and non coloured cells for board, and event listeners for buttons.
     for(let i = 8; i > 0; i--) {
         let row = document.createElement("div");
         row.setAttribute("class", "row");
@@ -104,7 +103,7 @@ function updateHalfMoveClock(newVal) {
 
 function updateFullMoves(newVal) {
     let clock = document.getElementById("fullmoveCounter");
-    clock.innerHTML = `full moves: ${newVal}`;
+    clock.innerHTML = `full moves: ${parseInt(newVal)}`;
     fullmoveClockCount = parseInt(newVal);
 }
 
@@ -136,21 +135,40 @@ function updateFenGameState(piecePlacementArray) {
 
 //start of piece moving functions
 function updateSelectedCoord(cellCoord) {
-    let pieceInCoord = gameState[cellCoord];
-
-    movePiece(cellCoord, "a4", pieceInCoord)
-}
-
-function movePiece(cellCoord, targetCoord, piece) {
-    let ogCellLetter = cellCoord[0];
-    let ogCellNum = parseInt(cellCoord[1]);
-
     let cell = document.getElementById(cellCoord);
-    let targetCell = document.getElementById(`${ogCellLetter}${ogCellNum + 2}`);
-
-    cell.style.backgroundImage = "";
-    targetCell.style.backgroundImage = `url('/img/pieces/${piece}.png')`;
+    
+    if(selectedCoord == cellCoord) {
+        isPieceSelected = false;
+        selectedCoord = "";
+        cell.style.backgroundColor = "";
+    }
+    else if(!isPieceSelected) {
+        selectedCoord = cellCoord;
+        isPieceSelected = true;
+        cell.style.backgroundColor = "lightpink"
+    }
+    else {
+        let startingCell = document.getElementById(selectedCoord);
+        startingCell.style.backgroundColor = "";
+        movePieces(selectedCoord, cellCoord);
+        selectedCoord = "";
+        isPieceSelected = false;
+    }
 }
+
+function movePieces(startingCoord, targetCoord) {
+    let piece = gameState[startingCoord];
+    let startCell = document.getElementById(startingCoord);
+    let targetCell = document.getElementById(targetCoord);
+
+    gameState[startingCoord] = "";
+    gameState[targetCoord] = piece
+
+    startCell.style.backgroundImage = "";
+    targetCell.style.backgroundImage = `url('/img/pieces/${piece}.png')`;
+    fullmoveClockCount++;
+}
+
 
 //end of piece moving functions
 
