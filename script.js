@@ -1,17 +1,15 @@
 let outerGrid = document.querySelector("#outerGrid");
 
+let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 let letters = ["a","b","c","d","e","f","g","h"];
+let pieces = ["p","P","r","R","n","N","b","B","k","K","q","Q"];
 let selectedPiece = "";
-
-let curBoard = [
-
-];
 
 let activeColour = "-"
 let halfmoveClockCount = "-";
 let fullmoveClockCount = "-";
 
-let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+let gameState = {};
 
 document.getElementById("startNewButton").addEventListener("click", () => {
     decodeFen(startingFen);
@@ -38,6 +36,8 @@ function gridGeneration() {
         for(let x = 0; x < 8; x++) {
             let cellCoord = `${letters[x]}${i}`;
             let cell = document.createElement("div");
+
+            gameState[`${letters[x]}${i}`] = "1";
             
             cell.setAttribute("id", cellCoord)
             cell.setAttribute("class", (i % 2 != 0 && x % 2 == 0)||(i % 2 == 0 && x % 2 != 0) ? "cellColoured" : "cell");
@@ -61,7 +61,6 @@ function updateSelectedPiece(cellCoord) {
         selectedPiece = cellCoord;
     }
 }
-
 //start of fen decoder functions
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
@@ -129,17 +128,32 @@ function updateGameState(piecePlacementArray) {
         
         for(let x = 0; x < 8; x++) {
             let letter = letters[x]
-            let cellCoord = `${letter}${rowInd}`
+            let cellCoord = `${letter}${rowInd}`;
             let cell = document.querySelector(`#${cellCoord}`)
             let curChar = curRow[x]
 
             if(curChar == "1") {
+                gameState[`${letter}${rowInd}`] = "1";
                 continue;
             }
             else {
+                gameState[`${letter}${rowInd}`] = curChar;
                 cell.style.backgroundImage = `url('/img/pieces/${curChar}.png')`
             }
         }
     }
+    console.log(gameState)
 }
 //end of fen decoder functions
+
+//start of piece moving functions
+
+//end of piece moving functions
+
+
+//piece movements
+//values = x()0()
+
+//pawn : if not moved yet -> x()0(+1 or +2) // only forwards by one or two squares.
+//rook : x(+ or - infinitely until blocked)0() or x()0(+ or - infinitely until blocked) -> only straight lines
+//knight : 
