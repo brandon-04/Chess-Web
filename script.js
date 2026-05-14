@@ -11,6 +11,8 @@ let halfmoveClockCount = 0;
 let fullmoveClockCount = 1;
 
 let selectedCoord = "";
+let selectedCoordColor = "";
+
 let isPieceSelected = false;
 
 let gameState = {};//populated by gridGeneration();
@@ -140,45 +142,69 @@ function updateFenGameState(piecePlacementArray) {
 //start of piece moving functions
 function updateSelectedCoord(cellCoord) {
     let cell = document.getElementById(cellCoord);
-    
+
     if(selectedCoord == cellCoord) {
-        isPieceSelected = false;
-        selectedCoord = "";
-        cell.style.backgroundColor = "";
+        clearSelectedPiece(cell);
     }
     else if(!isPieceSelected) {
-        selectedCoord = cellCoord;
-        isPieceSelected = true;
-        cell.style.backgroundColor = "lightpink"
+        highlightSelectedPiece(cell,cellCoord);
     }
     else {
         let startingCell = document.getElementById(selectedCoord);
-        startingCell.style.backgroundColor = "";
+
         movePieces(selectedCoord, cellCoord);
-        selectedCoord = "";
-        isPieceSelected = false;
+        clearSelectedPiece(startingCell);
     }
+}
+
+function clearSelectedPiece(cellDomObject) {
+    isPieceSelected = false;
+    selectedCoord = "";
+    cellDomObject.style.backgroundColor = "";
+}
+
+function highlightSelectedPiece(cellDomObject,cellCoord) {
+    selectedCoord = cellCoord;
+    isPieceSelected = true;
+    cellDomObject.style.backgroundColor = "lightpink";
+
 }
 
 function movePieces(startingCoord, targetCoord) {
-    let piece = gameState[startingCoord];
+    let startPiece = gameState[startingCoord];
+    let targetPiece = gameState[targetCoord];
+
     let startCell = document.getElementById(startingCoord);
     let targetCell = document.getElementById(targetCoord);
 
-    gameState[startingCoord] = "1";
-    gameState[targetCoord] = piece
+    let startPieceColor = pieceColor(startingCoord);
+    let targetPieceColor = pieceColor(targetCoord);
 
-    startCell.style.backgroundImage = "";
-    targetCell.style.backgroundImage = `url('/img/pieces/${piece}.png')`;
+    if(startPieceColor != targetPieceColor && startPieceColor == activeColour) {
+        gameState[startingCoord] = "1";
+        gameState[targetCoord] = startPiece;
 
-    if(activeColour == "b") {
-       updateFullMoves(fullmoveClockCount + 1) 
+        startCell.style.backgroundImage = "";
+        targetCell.style.backgroundImage = `url('/img/pieces/${startPiece}.png')`;
+
+        updateFullMoves(activeColour == "b"? fullmoveClockCount + 1 : fullmoveClockCount);
+        updateActiveColour(activeColour == "w" ? "b" : "w");
     }
-
-    updateActiveColour(activeColour == "w" ? "b" : "w")
 }
 
+function pieceColor(coord) {
+    if(blackPieces.includes(gameState[coord])) {
+        return "b";
+    }
+    else if(whitePieces.includes(gameState[coord])) {
+        return "w";
+    }
+    else {
+        return "1";
+    }
+}
 
 //end of piece moving functions
 
 
+//||
