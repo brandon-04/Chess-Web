@@ -177,10 +177,11 @@ function movePieces(startingCoord, targetCoord) {
     let startCell = document.getElementById(startingCoord);
     let targetCell = document.getElementById(targetCoord);
 
-    let startPieceColor = pieceColor(startingCoord);
-    let targetPieceColor = pieceColor(targetCoord);
+    let startPieceColor = getPieceColor(startingCoord);
+    let targetPieceColor = getPieceColor(targetCoord);
 
     if(startPieceColor != targetPieceColor && startPieceColor == activeColour) {
+        checkValidMove(startingCoord,targetCoord,targetPiece);
         gameState[startingCoord] = "1";
         gameState[targetCoord] = startPiece;
 
@@ -192,7 +193,22 @@ function movePieces(startingCoord, targetCoord) {
     }
 }
 
-function pieceColor(coord) {
+function checkValidMove(startingCoord, targetCoord, capturePiece) {
+    let pieceColor = getPieceColor(startingCoord);
+    let piece = gameState[startingCoord];
+
+    let startingFileIndex = letters.indexOf(startingCoord[0]);
+    let endingFileIndex = letters.indexOf(targetCoord[0]);
+
+    let startingRow = startingCoord[1];
+    let endingRow = targetCoord[1];
+    let rowDiff = parseInt(startingRow) - parseInt(endingRow);
+
+    let isFileSame = startingFileIndex == endingFileIndex ? true : false;
+    let isRowSame = startingRow == endingRow ? true : false;
+}
+
+function getPieceColor(coord) {
     if(blackPieces.includes(gameState[coord])) {
         return "b";
     }
