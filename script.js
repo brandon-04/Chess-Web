@@ -224,8 +224,21 @@ function checkMoveIsValid(startingCoord, targetCoord) {
     let startingY = startingCoord[1];
 
     let targetFile = letters.indexOf(targetCoord[0])
-    let targetY = startingCoord[1];
+    let targetY = targetCoord[1];
 
+    let diffY = startingY - targetY
+
+    let PMaxMoves = startingY == 2 ? -3 : -2
+    let pMaxMoves = startingY == 7 ? 3 : 2
+
+    if(startingPiece == "P" && startingFile == targetFile && diffY > whitePawnMaxMoves) {
+        console.log("valid")
+        return true;
+    }
+    else if (startingPiece == "p" && startingFile == targetFile && diffY < pMaxMoves) {
+        console.log("valid");
+        return true
+    }
 
 }
 
