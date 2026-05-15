@@ -19,8 +19,6 @@ let gameState = {};//populated by gridGeneration();
 
 boardSetup();
 
-
-
 //start of fen decoder functions
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
     const fenArr = fen.split(" ");
@@ -104,7 +102,6 @@ function updateFenGameState(piecePlacementArray) {
         }
     }
 }
-//end of fen decoder functions
 //start of piece moving functions
 function updateSelectedCoord(cellCoord) {
     let cell = document.getElementById(cellCoord);
@@ -147,15 +144,17 @@ function movePieces(startingCoord, targetCoord) {
     let targetPieceColor = getPieceColor(targetCoord);
 
     let isCapture = targetPiece != "1" ? true : false;
-    
+
     if(startPiece == "p" || startPiece == "P" || targetPiece != "1") {
         updateHalfMoveClock(0)
     }
     else {
         updateHalfMoveClock(halfmoveClockCount + 1)
     }
-
+    
     if(startPieceColor != targetPieceColor && startPieceColor == activeColour) {
+        checkMoveIsValid(startingCoord, targetCoord)
+        
         gameState[startingCoord] = "1";
         gameState[targetCoord] = startPiece;
 
@@ -179,7 +178,7 @@ function boardSetup() {//generates coloured and non coloured cells for board, an
             let cellCoord = `${letters[x]}${i}`;
             let cell = document.createElement("div");
             
-            gameState[`${letters[x]}${i}`] = "1";
+            gameState[cellCoord] = "1";
             
             cell.setAttribute("id", cellCoord)
             cell.setAttribute("class", (i % 2 != 0 && x % 2 == 0)||(i % 2 == 0 && x % 2 != 0) ? "cellColoured" : "cell");
@@ -201,6 +200,8 @@ function boardSetup() {//generates coloured and non coloured cells for board, an
     document.getElementById("loadButton").addEventListener("click", () => {
         console.log("loaded")
     });
+
+    decodeFen(startingFen)
 }
 
 function getPieceColor(coord) {
@@ -215,7 +216,29 @@ function getPieceColor(coord) {
     }
 }
 
-function pushMoveToList() {
+function checkMoveIsValid(startingCoord, targetCoord) {
+    let startingPiece = gameState[startingCoord];
+    let color = getPieceColor(startingCoord);
+
+    let startingFile = letters.indexOf(startingCoord[0])
+    let startingY = startingCoord[1];
+
+    let targetFile = letters.indexOf(targetCoord[0])
+    let targetY = startingCoord[1];
+
 
 }
+
+//features to add
+//move validation
+//adding move to move list 
+//enforce 50 move rule -> draw
+//threefold repetition
+//check and check mate
+//stale mate
+//en passant
+//sufficient material
+//win, lose and draw screens
+//saving and loading games -> fen encoder and local storage save
+
 //||
