@@ -218,6 +218,10 @@ function getPieceColor(coord) {
 
 function checkMoveIsValid(startingCoord, targetCoord) {
     let startingPiece = gameState[startingCoord];
+    let targetPiece = gameState[startingCoord];
+
+    let isCapture = targetPiece != "1" ? true : false;
+
     let color = getPieceColor(startingCoord);
 
     let startingFile = letters.indexOf(startingCoord[0])
@@ -226,24 +230,27 @@ function checkMoveIsValid(startingCoord, targetCoord) {
     let targetFile = letters.indexOf(targetCoord[0])
     let targetY = targetCoord[1];
 
-    let diffY = startingY - targetY
+    let diffY = startingY - targetY;
+    let diffX = startingFile - targetFile;
 
-    let PMaxMoves = startingY == 2 ? -3 : -2
-    let pMaxMoves = startingY == 7 ? 3 : 2
+    let PMaxMoves = startingY == 2 ? -3 : -2;
+    let pMaxMoves = startingY == 7 ? 3 : 2;
 
-    if(startingPiece == "P" && startingFile == targetFile && diffY > whitePawnMaxMoves) {
-        console.log("valid")
-        return true;
+    if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {
+        console.log("valid");
+        // return true;
     }
     else if (startingPiece == "p" && startingFile == targetFile && diffY < pMaxMoves) {
         console.log("valid");
-        return true
+        // return true;
     }
 
 }
 
+
 //features to add
 //move validation
+//check if move is blocked
 //adding move to move list 
 //enforce 50 move rule -> draw
 //threefold repetition
