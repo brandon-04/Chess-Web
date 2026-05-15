@@ -132,7 +132,7 @@ function updateFenGameState(piecePlacementArray) {
             }
             else {
                 gameState[cellCoord] = curChar;
-                cell.style.backgroundImage = `url('/img/pieces/${curChar}.png')`;
+                cell.style.backgroundImage = `url('img/pieces/${curChar}.png')`;
             }
         }
     }
@@ -186,7 +186,7 @@ function movePieces(startingCoord, targetCoord) {
         gameState[targetCoord] = startPiece;
 
         startCell.style.backgroundImage = "";
-        targetCell.style.backgroundImage = `url('/img/pieces/${startPiece}.png')`;
+        targetCell.style.backgroundImage = `url('img/pieces/${startPiece}.png')`;
 
         updateFullMoves(activeColour == "b"? fullmoveClockCount + 1 : fullmoveClockCount);
         updateActiveColour(activeColour == "w" ? "b" : "w");

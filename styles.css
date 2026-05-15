@@ -1,8 +1,7 @@
 @font-face {
     font-family: Saira;
-    src: url('/fonts/saira/Saira-VariableFont_wdth\,wght.ttf');
+    src: url('fonts/saira/Saira-VariableFont_wdth\,wght.ttf');
 }
-
 :root {
     --norm-height: 750px;
     --moves-width: 400px;
