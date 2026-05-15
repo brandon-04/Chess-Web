@@ -19,40 +19,7 @@ let gameState = {};//populated by gridGeneration();
 
 boardSetup();
 
-function boardSetup() {//generates coloured and non coloured cells for board, and event listeners for buttons.
-    for(let i = 8; i > 0; i--) {
-        let row = document.createElement("div");
-        row.setAttribute("class", "row");
 
-        outerGrid.appendChild(row);
-        
-        for(let x = 0; x < 8; x++) {
-            let cellCoord = `${letters[x]}${i}`;
-            let cell = document.createElement("div");
-            
-            gameState[`${letters[x]}${i}`] = "1";
-            
-            cell.setAttribute("id", cellCoord)
-            cell.setAttribute("class", (i % 2 != 0 && x % 2 == 0)||(i % 2 == 0 && x % 2 != 0) ? "cellColoured" : "cell");
-
-            cell.addEventListener("click", () => {
-                updateSelectedCoord(cellCoord);
-            })
-            
-            row.appendChild(cell);
-        }
-    }
-    
-    document.getElementById("startNewButton").addEventListener("click", () => {
-        decodeFen(startingFen);
-    });
-    document.getElementById("saveButton").addEventListener("click", () => {
-    
-    });
-    document.getElementById("loadButton").addEventListener("click", () => {
-        console.log("loaded")
-    });
-}
 
 //start of fen decoder functions
 function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassant[3] HalfmoveClock[4] FullmoveNumber[5]
@@ -138,7 +105,6 @@ function updateFenGameState(piecePlacementArray) {
     }
 }
 //end of fen decoder functions
-
 //start of piece moving functions
 function updateSelectedCoord(cellCoord) {
     let cell = document.getElementById(cellCoord);
@@ -180,8 +146,16 @@ function movePieces(startingCoord, targetCoord) {
     let startPieceColor = getPieceColor(startingCoord);
     let targetPieceColor = getPieceColor(targetCoord);
 
+    let isCapture = targetPiece != "1" ? true : false;
+    
+    if(startPiece == "p" || startPiece == "P" || targetPiece != "1") {
+        updateHalfMoveClock(0)
+    }
+    else {
+        updateHalfMoveClock(halfmoveClockCount + 1)
+    }
+
     if(startPieceColor != targetPieceColor && startPieceColor == activeColour) {
-        checkValidMove(startingCoord,targetCoord,targetPiece);
         gameState[startingCoord] = "1";
         gameState[targetCoord] = startPiece;
 
@@ -193,19 +167,40 @@ function movePieces(startingCoord, targetCoord) {
     }
 }
 
-function checkValidMove(startingCoord, targetCoord, capturePiece) {
-    let pieceColor = getPieceColor(startingCoord);
-    let piece = gameState[startingCoord];
+//utility functions
+function boardSetup() {//generates coloured and non coloured cells for board, and event listeners for buttons.
+    for(let i = 8; i > 0; i--) {
+        let row = document.createElement("div");
+        row.setAttribute("class", "row");
 
-    let startingFileIndex = letters.indexOf(startingCoord[0]);
-    let endingFileIndex = letters.indexOf(targetCoord[0]);
+        outerGrid.appendChild(row);
+        
+        for(let x = 0; x < 8; x++) {
+            let cellCoord = `${letters[x]}${i}`;
+            let cell = document.createElement("div");
+            
+            gameState[`${letters[x]}${i}`] = "1";
+            
+            cell.setAttribute("id", cellCoord)
+            cell.setAttribute("class", (i % 2 != 0 && x % 2 == 0)||(i % 2 == 0 && x % 2 != 0) ? "cellColoured" : "cell");
 
-    let startingRow = startingCoord[1];
-    let endingRow = targetCoord[1];
-    let rowDiff = parseInt(startingRow) - parseInt(endingRow);
-
-    let isFileSame = startingFileIndex == endingFileIndex ? true : false;
-    let isRowSame = startingRow == endingRow ? true : false;
+            cell.addEventListener("click", () => {
+                updateSelectedCoord(cellCoord);
+            })
+            
+            row.appendChild(cell);
+        }
+    }
+    
+    document.getElementById("startNewButton").addEventListener("click", () => {
+        decodeFen(startingFen);
+    });
+    document.getElementById("saveButton").addEventListener("click", () => {
+    
+    });
+    document.getElementById("loadButton").addEventListener("click", () => {
+        console.log("loaded")
+    });
 }
 
 function getPieceColor(coord) {
@@ -220,7 +215,7 @@ function getPieceColor(coord) {
     }
 }
 
-//end of piece moving functions
+function pushMoveToList() {
 
-
+}
 //||
