@@ -222,7 +222,7 @@ function checkMoveIsValid(startingCoord, targetCoord) {
 
     let isCapture = targetPiece != "1" ? true : false;
 
-    let color = getPieceColor(startingCoord);
+    let color = getPieceColor(startingCoord, targetCoord);
 
     let startingFile = letters.indexOf(startingCoord[0])
     let startingY = startingCoord[1];
@@ -236,13 +236,42 @@ function checkMoveIsValid(startingCoord, targetCoord) {
     let PMaxMoves = startingY == 2 ? -3 : -2;
     let pMaxMoves = startingY == 7 ? 3 : 2;
 
-    if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {
+    if(checkMoveIsBlocked(startingCoord, targetCoord) == true) {
+        console.log("blocked")
+    }
+    else if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {
         console.log("valid");
         // return true;
     }
     else if (startingPiece == "p" && startingFile == targetFile && diffY < pMaxMoves) {
         console.log("valid");
         // return true;
+    }
+}
+
+function checkMoveIsBlocked(startingCoord, targetCoord) {
+    let startingFile = letters.indexOf(startingCoord[0])
+    let startingY = startingCoord[1];
+
+    let targetFile = letters.indexOf(targetCoord[0])
+    let targetY = targetCoord[1];
+
+    let arr = [];
+    const allEqual = arr => arr.every(val => val === arr[0]);
+
+    //for same file
+    if(startingFile == targetFile) {
+        for(let i = Math.min(startingY,targetY) + 1; i <= Math.max(startingY,targetY) - 1; i++) {
+            arr.push(gameState[`${letters[startingFile]}${i}`]);
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+    else if(startingY == targetY) {
+        for(let i = Math.min(startingFile, targetY) + 1; i <= Math.max(startingFile, targetY) - 1; i++) {
+            arr.push(gameState[`${letters[i]}${startingY}`]);
+        }
+        // console.log(allEqual(arr) == true ? "not blocked" : "blocked"); 
+        console.log(arr)
     }
 
 }
