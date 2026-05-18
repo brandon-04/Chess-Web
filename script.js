@@ -1,4 +1,5 @@
 let outerGrid = document.querySelector("#outerGrid");
+let movesList = document.querySelector("#mainMoveContent");
 
 let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 let letters = ["a","b","c","d","e","f","g","h"];
@@ -16,6 +17,7 @@ let selectedCoordColor = "";
 let isPieceSelected = false;
 
 let gameState = {};//populated by gridGeneration();
+let moves = [];
 
 boardSetup();
 
@@ -34,6 +36,8 @@ function decodeFen(fen) {//piecePlacement[0] activeColour[1] Castling[2] EnPassa
     updateActiveColour(actCol);
     updateHalfMoveClock(HalfmoveClock);
     updateFullMoves(fullmoveNum);
+
+    clearMoveNotation();
 }
 
 function transformPieceArrayFen(piecePlacementArray) {
@@ -166,6 +170,23 @@ function movePieces(startingCoord, targetCoord) {
     }
 }
 
+function createMoveNotation(startingCoord, targetCoord, isCapture) {
+    let gamePiece = gameState[startingCoord];
+
+    let curObj = document.createElement("h1");
+    curObj.setAttribute("class", "moveText");
+
+    let curImg = document.createElement("div");
+    curImg.setAttribute("class", "figurine");
+    curImg.style.backgroundImage = `url('img/pieces/${gamePiece}.png')`;
+
+    curObj.textContent = `${isCapture == true ? "x" : ""}${targetCoord}`;
+
+    curObj.appendChild(curImg)
+    movesList.appendChild(curObj)
+
+}
+
 //utility functions
 function boardSetup() {//generates coloured and non coloured cells for board, and event listeners for buttons.
     for(let i = 8; i > 0; i--) {
@@ -218,7 +239,7 @@ function getPieceColor(coord) {
 
 function checkMoveIsValid(startingCoord, targetCoord) {
     let startingPiece = gameState[startingCoord];
-    let targetPiece = gameState[startingCoord];
+    let targetPiece = gameState[targetCoord];
 
     let isCapture = targetPiece != "1" ? true : false;
 
@@ -237,7 +258,10 @@ function checkMoveIsValid(startingCoord, targetCoord) {
     let pMaxMoves = startingY == 7 ? 3 : 2;
 
     if(checkMoveIsBlocked(startingCoord, targetCoord) == true) {
-        console.log("blocked")
+        console.log("blocked");
+    }
+    else if (isCapture == true) {
+        console.log("capture");
     }
     else if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {
         console.log("valid");
@@ -247,6 +271,7 @@ function checkMoveIsValid(startingCoord, targetCoord) {
         console.log("valid");
         // return true;
     }
+    createMoveNotation(startingCoord, targetCoord, isCapture)
 }
 
 function checkMoveIsBlocked(startingCoord, targetCoord) {
@@ -259,21 +284,26 @@ function checkMoveIsBlocked(startingCoord, targetCoord) {
     let arr = [];
     const allEqual = arr => arr.every(val => val === arr[0]);
 
-    //for same file
-    if(startingFile == targetFile) {
+    if(startingFile == targetFile) {//for same file
         for(let i = Math.min(startingY,targetY) + 1; i <= Math.max(startingY,targetY) - 1; i++) {
             arr.push(gameState[`${letters[startingFile]}${i}`]);
         }
         console.log(allEqual(arr) == true ? "not blocked" : "blocked");
     }
-    else if(startingY == targetY) {
-        for(let i = Math.min(startingFile, targetY) + 1; i <= Math.max(startingFile, targetY) - 1; i++) {
+    else if(startingY == targetY) {//for same row
+        for(let i = Math.min(startingFile, targetFile) + 1; i <= Math.max(startingFile, targetFile) - 1; i++) {
             arr.push(gameState[`${letters[i]}${startingY}`]);
+            console.log(`${letters[i]}${startingY}`)
+            console.log(allEqual(arr) == true ? "not blocked" : "blocked"); 
+            
         }
-        // console.log(allEqual(arr) == true ? "not blocked" : "blocked"); 
         console.log(arr)
     }
 
+}
+
+function clearMoveNotation() {
+    movesList.innerHTML = "";
 }
 
 
