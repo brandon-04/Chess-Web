@@ -158,7 +158,7 @@ function movePieces(startingCoord, targetCoord) {
     }
     
     if(startPieceColor != targetPieceColor && startPieceColor == activeColour) {
-        checkMoveIsValid(startingCoord, targetCoord)
+        handleMoveValidation(startingCoord, targetCoord)
         
         gameState[startingCoord] = "1";
         gameState[targetCoord] = startPiece;
@@ -236,50 +236,17 @@ function getPieceColor(coord) {
     }
 }
 
-function checkMoveIsValid(startingCoord, targetCoord) {
-    let startingPiece = gameState[startingCoord];
+function handleMoveValidation(startingCoord, targetCoord) {
     let targetPiece = gameState[targetCoord];
-
     let isCapture = targetPiece != "1" ? true : false;
 
-    let color = getPieceColor(startingCoord, targetCoord);
+    checkMoveIsValid(startingCoord, targetCoord);
+    checkMoveIsBlocked(startingCoord, targetCoord);
 
-    let startingFile = letters.indexOf(startingCoord[0])
-    let startingY = startingCoord[1];
-
-    let targetFile = letters.indexOf(targetCoord[0])
-    let targetY = targetCoord[1];
-
-    let diffY = startingY - targetY;
-    let diffX = startingFile - targetFile;
-
-    let PMaxMoves = startingY == 2 ? -3 : -2;
-    let pMaxMoves = startingY == 7 ? 3 : 2;
-
-    if(checkMoveIsBlocked(startingCoord, targetCoord) == true) {
-        console.log("blocked");
+    if(checkMoveIsValid() && checkMoveIsBlocked()) {
+        console.log("piece moved!")
     }
-    else if (isCapture == true) {
-        console.log("capture");
-    }
-    else if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {//white pawn validation
-        console.log("valid");
-        // return true;
-    }
-    else if (startingPiece == "p" && startingFile == targetFile && diffY < pMaxMoves) {//black pawn validation
-        console.log("valid");
-        // return true;
-    }
-    else if((startingPiece == "r" || startingPiece == "R") && (startingFile == targetFile || startingY == targetY)) {//rook validation
-        console.log("valid");
-    }
-    else if(startingPiece == "b" || startingPiece == "B") {//bishop validation
-
-    }
-    else if(startingPiece == "q" || startingPiece == "Q") {
-
-    }
-    createMoveNotation(startingCoord, targetCoord, isCapture)
+    createMoveNotation(startingCoord, targetCoord, isCapture);
 }
 
 function checkMoveIsBlocked(startingCoord, targetCoord) {
@@ -307,6 +274,113 @@ function checkMoveIsBlocked(startingCoord, targetCoord) {
         console.log(allEqual(arr) == true ? "not blocked" : "blocked"); 
     }
     else if(startingFile < targetFile && startingY < targetY) {//top right diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile + i];
+            let checkY = startingY + i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+    else if(startingFile > targetFile && startingY < targetY) {//top left diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile - i];
+            let checkY = startingY + i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+    else if(startingFile > targetFile && startingY > targetY) {//bottom left diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile - i];
+            let checkY = startingY - i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+    else if(startingFile < targetFile && startingY > targetY) {//bottom right diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile + i];
+            let checkY = startingY - i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+}
+
+function checkMoveIsValid(startingCoord, targetCoord) {
+    let startingPiece = gameState[startingCoord];
+    let targetPiece = gameState[targetCoord];
+
+    let isCapture = targetPiece != "1" ? true : false;
+
+    let color = getPieceColor(startingCoord, targetCoord);
+
+    let startingFile = letters.indexOf(startingCoord[0])
+    let startingY = startingCoord[1];
+
+    let targetFile = letters.indexOf(targetCoord[0])
+    let targetY = targetCoord[1];
+
+    let diffY = startingY - targetY;
+    let diffX = startingFile - targetFile;
+
+    let PMaxMoves = startingY == 2 ? -3 : -2;
+    let pMaxMoves = startingY == 7 ? 3 : 2;
+
+    if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {//white pawn validation
+        return true;
+    }
+    else if (startingPiece == "p" && startingFile == targetFile && diffY < pMaxMoves) {//black pawn validation
+        return true;
+    }
+    else if((startingPiece == "r" || startingPiece == "R") && (startingFile == targetFile || startingY == targetY)) {//rook validation
+        return true
+    }
+    else if(startingPiece == "b" || startingPiece == "B") {//bishop validation
+
+    }
+    else if(startingPiece == "q" || startingPiece == "Q") {
+
+    }
+}
+
+function genDiagArray(startingCoord, direction) {
+    let startingFile = letters.indexOf(startingCoord[0]);
+    let startingY = parseInt(startingCoord[1]);
+
+    let targetFile = letters.indexOf(targetCoord[0]);
+    let targetY = parseInt(targetCoord[1]);
+
+    let diffY = Math.max(startingY, targetY) - Math.min(startingY, targetY);
+
+    let arr = [];
+    const allEqual = arr => arr.every(val => val === arr[0]);
+
+    if(startingFile < targetFile && startingY < targetY) {//top right diag
         for(let i = 1; i < diffY; i ++) {
             let checkFile = letters[startingFile + i];
             let checkY = startingY + i;
