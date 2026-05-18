@@ -106,6 +106,7 @@ function updateFenGameState(piecePlacementArray) {
         }
     }
 }
+
 //start of piece moving functions
 function updateSelectedCoord(cellCoord) {
     let cell = document.getElementById(cellCoord);
@@ -174,17 +175,15 @@ function createMoveNotation(startingCoord, targetCoord, isCapture) {
     let gamePiece = gameState[startingCoord];
 
     let curObj = document.createElement("h1");
-    curObj.setAttribute("class", "moveText");
+    curObj.setAttribute("class", "moveText"); 
+    curObj.textContent = `${isCapture == true ? "x" : ""}${targetCoord}`;
 
     let curImg = document.createElement("div");
     curImg.setAttribute("class", "figurine");
     curImg.style.backgroundImage = `url('img/pieces/${gamePiece}.png')`;
 
-    curObj.textContent = `${isCapture == true ? "x" : ""}${targetCoord}`;
-
-    curObj.appendChild(curImg)
-    movesList.appendChild(curObj)
-
+    curObj.appendChild(curImg);
+    movesList.appendChild(curObj);
 }
 
 //utility functions
@@ -263,13 +262,22 @@ function checkMoveIsValid(startingCoord, targetCoord) {
     else if (isCapture == true) {
         console.log("capture");
     }
-    else if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {
+    else if(startingPiece == "P" && startingFile == targetFile && diffY > PMaxMoves) {//white pawn validation
         console.log("valid");
         // return true;
     }
-    else if (startingPiece == "p" && startingFile == targetFile && diffY < pMaxMoves) {
+    else if (startingPiece == "p" && startingFile == targetFile && diffY < pMaxMoves) {//black pawn validation
         console.log("valid");
         // return true;
+    }
+    else if((startingPiece == "r" || startingPiece == "R") && (startingFile == targetFile || startingY == targetY)) {//rook validation
+        console.log("valid");
+    }
+    else if(startingPiece == "b" || startingPiece == "B") {//bishop validation
+
+    }
+    else if(startingPiece == "q" || startingPiece == "Q") {
+
     }
     createMoveNotation(startingCoord, targetCoord, isCapture)
 }
@@ -293,13 +301,14 @@ function checkMoveIsBlocked(startingCoord, targetCoord) {
     else if(startingY == targetY) {//for same row
         for(let i = Math.min(startingFile, targetFile) + 1; i <= Math.max(startingFile, targetFile) - 1; i++) {
             arr.push(gameState[`${letters[i]}${startingY}`]);
-            console.log(`${letters[i]}${startingY}`)
-            console.log(allEqual(arr) == true ? "not blocked" : "blocked"); 
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked"); 
+    }
+    else if(startingFile != targetFile && startingY != targetY) {//diagonal movement
+        for(let i = Math.min(startingFile, targetFile); i < Math.max(startingFile, targetFile); i++) {
             
         }
-        console.log(arr)
     }
-
 }
 
 function clearMoveNotation() {
@@ -319,5 +328,4 @@ function clearMoveNotation() {
 //sufficient material
 //win, lose and draw screens
 //saving and loading games -> fen encoder and local storage save
-
-//||
+//

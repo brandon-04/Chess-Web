@@ -26,7 +26,6 @@ body {
 }
 
 /*grid and board stylings*/
-
 #outerGrid {
     display: flex;
     justify-content: center;
@@ -79,14 +78,13 @@ body {
 }
 
 /*Moves container stylings*/
-
 #moveContainer {
     display: flex;
     justify-content: top;
     align-items: center;
     flex-direction: column;
 
-    width: var(--moves-width);
+    width: 200px;
     height: var(--norm-height);
 
     border: thick solid black;
@@ -105,7 +103,7 @@ body {
     border: thin solid black;
 }
 #titleBox > h1 {
-    font-size: 4em;
+    font-size: 3em;
 }
 
 #optionsBox {
@@ -157,15 +155,16 @@ body {
 .moveText {
     display: flex;
     justify-content: center;
+    align-items: center;
     text-align: center;
 
     flex-direction: row-reverse;
 
-    font-size: 1rem;
+    font-size: 25px;
 }
 .figurine {
-    height: 50px;
-    width: 50px;
+    height: 35px;
+    width: 35px;
 
     background-repeat: no-repeat;
     background-size: contain;
