@@ -283,11 +283,13 @@ function checkMoveIsValid(startingCoord, targetCoord) {
 }
 
 function checkMoveIsBlocked(startingCoord, targetCoord) {
-    let startingFile = letters.indexOf(startingCoord[0])
-    let startingY = startingCoord[1];
+    let startingFile = letters.indexOf(startingCoord[0]);
+    let startingY = parseInt(startingCoord[1]);
 
-    let targetFile = letters.indexOf(targetCoord[0])
-    let targetY = targetCoord[1];
+    let targetFile = letters.indexOf(targetCoord[0]);
+    let targetY = parseInt(targetCoord[1]);
+
+    let diffY = Math.max(startingY, targetY) - Math.min(startingY, targetY);
 
     let arr = [];
     const allEqual = arr => arr.every(val => val === arr[0]);
@@ -304,10 +306,61 @@ function checkMoveIsBlocked(startingCoord, targetCoord) {
         }
         console.log(allEqual(arr) == true ? "not blocked" : "blocked"); 
     }
-    else if(startingFile != targetFile && startingY != targetY) {//diagonal movement
-        for(let i = Math.min(startingFile, targetFile); i < Math.max(startingFile, targetFile); i++) {
-            
+    else if(startingFile < targetFile && startingY < targetY) {//top right diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile + i];
+            let checkY = startingY + i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
         }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+    else if(startingFile > targetFile && startingY < targetY) {//top left diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile - i];
+            let checkY = startingY + i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+    else if(startingFile > targetFile && startingY > targetY) {//bottom left diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile - i];
+            let checkY = startingY - i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
+    }
+    else if(startingFile < targetFile && startingY > targetY) {//bottom right diag
+        for(let i = 1; i < diffY; i ++) {
+            let checkFile = letters[startingFile + i];
+            let checkY = startingY - i;
+
+            if(checkFile == "h" || checkY == 8){
+                break;
+            }
+
+            arr.push(gameState[`${checkFile}${checkY}`]);
+            console.log(gameState[`${checkFile}${checkY}`])
+        }
+        console.log(allEqual(arr) == true ? "not blocked" : "blocked");
     }
 }
 
@@ -328,4 +381,4 @@ function clearMoveNotation() {
 //sufficient material
 //win, lose and draw screens
 //saving and loading games -> fen encoder and local storage save
-//
+//||
